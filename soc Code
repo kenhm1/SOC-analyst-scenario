@@ -1,0 +1,47 @@
+
+# RAW SOC SYSTEM LOGS
+# Format: [SEVERITY] | IP_ADDRESS | USERNAME | PORT | EVENT_STATUS
+raw_forensic_logs = [
+    " [critical] | 192.168.1.105 | Admin_User | 22 | failed_login ",
+    "[WARNING] | 10.0.0.50 | root | 443 | MALWARE_SIGNATURE_DETECTED",
+    " [CRITICAL] | 172.16.254.1 | unknown_user | 80 | SQL_INJECTION_ATTEMPT ",
+    " [alert] | 192.168.1.200 | SYS_ADMIN | 3389 | UNAUTHORIZED_ACCESS ",
+    " [warning] | 10.0.0.12 | test_acc | 8080 | brute_force_suspected "
+]
+
+# Define the Immutable Tuple
+secure_ports = (22, 80, 443,3389)
+
+# Process each raw log
+for raw_log in raw_forensic_logs:
+
+    # Clean and split the log
+    log_parts = raw_log.strip().split("|")
+
+    # Extract information using zero-based indexing
+    severity = log_parts[0].strip().strip("[]").lower()
+    ip = log_parts[1].strip()
+    username = log_parts[2].strip()
+    port = int(log_parts[3].strip())
+    event = log_parts[4].strip()
+
+    # Display the cleaned information
+    print("\nSeverity:", severity)
+    print("IP Address:", ip)
+    print("Username:", username)
+    print("Port:", port)
+    print("Event:", event)
+
+    # Check the port
+    if port in secure_ports:
+        print("Port is approved.")
+    else:
+        print("WARNING: Port is not in the approved list!")
+
+# Ask the user to enter a port number
+user_port = int(input("\nEnter a port number to check: "))
+
+if user_port in secure_ports:
+    print("Port is approved.")
+else:
+    print("WARNING: Port is not in the approved list!")
